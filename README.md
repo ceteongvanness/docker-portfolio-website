@@ -1,7 +1,7 @@
-# Docker Portfolio Website
+# Personal Portfolio Website
 
-A containerized personal portfolio website with automated deployment to Azure and AWS using GitHub Actions.
-Sample code using https://github.com/codewithsadee/vcard-personal-portfolio
+A modern, responsive personal portfolio website containerized with Docker and deployable to both Azure and AWS through GitHub Actions.
+Sample code: https://github.com/codewithsadee/vcard-personal-portfolio
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)
@@ -9,205 +9,227 @@ Sample code using https://github.com/codewithsadee/vcard-personal-portfolio
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=flat&logo=amazon-aws&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=flat&logo=githubactions&logoColor=white)
 
-## 🚀 Features
+## 📌 Table of Contents
+- [Features](#-features)
+- [Demo](#-demo)
+- [Technologies Used](#-technologies-used)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Deployment](#-deployment)
+- [Performance](#-performance)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-- Responsive portfolio website
-- Docker containerization
-- SSL/TLS encryption
-- CI/CD with GitHub Actions
-- Multi-cloud deployment (Azure & AWS)
-- Nginx web server
-- Security best practices
-- Performance optimization
+## ✨ Features
 
-## 📋 Prerequisites
+- 🎨 Modern and responsive design
+- 🐳 Docker containerization
+- 🚀 CI/CD with GitHub Actions
+- 🌐 Multi-cloud deployment support (Azure & AWS)
+- 🔒 SSL/TLS encryption
+- 📱 Mobile-first approach
+- 🎯 SEO optimized
+- 🛡️ Security best practices
+- 📊 Performance optimized
 
-- Docker Desktop
-- Git
-- Node.js (for local development)
-- Azure CLI
-- AWS CLI
-- GitHub account
+## 🎮 Demo
 
-## 🛠️ Installation
+- Live Demo: [Your Portfolio URL](https://your-portfolio-url.com)
+- [Screenshots](#) (Coming soon)
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/yourusername/docker-portfolio-website.git
-cd docker-portfolio-website
-```
+## 🛠 Technologies Used
 
-2. **Build the Docker image**
-```bash
-docker build -t portfolio .
-```
+- **Frontend**
+  - HTML5
+  - CSS3
+  - JavaScript (ES6+)
+  - Responsive Design
+  - Custom Animations
 
-3. **Run locally**
-```bash
-docker run -d -p 80:80 portfolio
-```
+- **DevOps & Deployment**
+  - Docker
+  - GitHub Actions
+  - Azure Web Apps
+  - AWS Elastic Beanstalk
+  - Nginx
 
-## 🌐 Deployment
-
-### Azure Deployment
-
-1. **Set up Azure resources**
-```bash
-# Login to Azure
-az login
-
-# Create resource group
-az group create --name portfolio-rg --location eastus
-
-# Create container registry
-az acr create --resource-group portfolio-rg --name <registry-name> --sku Basic
-```
-
-2. **Deploy using GitHub Actions**
-- Add required secrets to your GitHub repository
-- Push to main branch to trigger deployment
-
-### AWS Deployment
-
-1. **Set up AWS resources**
-```bash
-# Configure AWS CLI
-aws configure
-
-# Create ECR repository
-aws ecr create-repository --repository-name portfolio
-```
-
-2. **Deploy using GitHub Actions**
-- Add AWS credentials to GitHub secrets
-- Push to main branch to trigger deployment
-
-## 🔧 Configuration
-
-### Environment Variables
-
-```env
-# Azure
-AZURE_CREDENTIALS=<your-azure-credentials>
-REGISTRY_USERNAME=<acr-username>
-REGISTRY_PASSWORD=<acr-password>
-
-# AWS
-AWS_ACCESS_KEY_ID=<your-access-key>
-AWS_SECRET_ACCESS_KEY=<your-secret-key>
-```
-
-### Nginx Configuration
-
-The default Nginx configuration is located in `nginx.conf`. Modify this file to adjust:
-- SSL settings
-- Cache control
-- Security headers
-- Performance optimizations
+- **Performance & SEO**
+  - Image Optimization
+  - Lazy Loading
+  - Caching Strategies
+  - Meta Tags Optimization
 
 ## 📁 Project Structure
 
-```
-portfolio-docker/
+```bash
+portfolio-website/
+├── portfolio/
+│   └── assets/
+│       ├── css/
+│       │   └── style.css
+│       ├── images/
+│       │   ├── avatars/
+│       │   ├── blog/
+│       │   ├── projects/
+│       │   ├── logos/
+│       │   └── icons/
+│       ├── js/
+│       │   └── script.js
+│       └── index.html
 ├── .github/
 │   └── workflows/
 │       ├── azure-deploy.yml
 │       └── aws-deploy.yml
-├── portfolio/
-│   ├── index.html
-│   ├── css/
-│   └── js/
+├── nginx/
+│   └── nginx.conf
 ├── Dockerfile
-├── nginx.conf
-├── .dockerignore
+├── docker-compose.yml
 └── README.md
 ```
 
-## 🔒 Security
+## 🚀 Getting Started
 
-- HTTPS enabled by default
-- Security headers configured
-- Regular security updates
-- Docker best practices implemented
-- WAF protection available
+### Prerequisites
 
-## 💻 Development
+- Docker Desktop
+- Node.js (for development)
+- Git
+- VS Code (recommended)
 
-1. **Local Development**
+### Installation
+
+1. **Clone the repository**
 ```bash
-# Start development server
+git clone https://github.com/yourusername/portfolio-website.git
+cd portfolio-website
+```
+
+2. **Local Development**
+```bash
+# Start local development server
 npm install
 npm start
-
-# Build for production
-npm run build
 ```
 
-2. **Docker Development**
+3. **Docker Development**
 ```bash
-# Build with development configuration
-docker build -t portfolio:dev -f Dockerfile.dev .
+# Build Docker image
+docker build -t portfolio .
 
-# Run with volume mount for live updates
-docker run -v ${PWD}/portfolio:/usr/share/nginx/html -p 80:80 portfolio:dev
+# Run container
+docker run -d -p 80:80 portfolio
 ```
 
-## 📈 Performance Optimization
+### Environment Variables
 
-- Nginx caching enabled
+Create a `.env` file in the root directory:
+```env
+NODE_ENV=development
+AZURE_WEBAPP_NAME=your-webapp-name
+AWS_REGION=your-region
+```
+
+## 📦 Deployment
+
+### Azure Deployment
+
+1. **Configure Azure CLI**
+```bash
+az login
+az account set --subscription <subscription-id>
+```
+
+2. **Deploy using GitHub Actions**
+- Add Azure credentials to GitHub secrets
+- Push to main branch
+
+### AWS Deployment
+
+1. **Configure AWS CLI**
+```bash
+aws configure
+```
+
+2. **Deploy using GitHub Actions**
+- Add AWS credentials to GitHub secrets
+- Push to main branch
+
+## 📈 Performance
+
+### Optimizations
+
+- Image compression and optimization
+- CSS minification
+- JavaScript bundling
+- Browser caching
 - Gzip compression
-- Image optimization
-- CSS/JS minification
-- Browser caching headers
 
-## 🔍 Monitoring
+### Benchmarks
 
-### Azure
-- Application Insights enabled
-- Performance metrics
-- Log analytics
-- Availability monitoring
+- Lighthouse Score: [Your Score]/100
+- PageSpeed Insights: [Your Score]/100
+- GTmetrix Grade: [Your Grade]
 
-### AWS
-- CloudWatch metrics
-- Health checks
-- Log monitoring
-- Performance tracking
+## 🔒 Security Features
 
-## 🚧 Troubleshooting
+- HTTPS enforcement
+- Security headers
+- Content Security Policy
+- XSS protection
+- CORS policies
 
-### Common Issues
+## 🛠 Development
 
-1. **Docker Build Fails**
+### Code Style
+
 ```bash
-# Clean Docker cache
-docker system prune -a
+# Run linter
+npm run lint
+
+# Format code
+npm run format
+
+# Optimize images
+npm run optimize:images
 ```
 
-2. **Deployment Issues**
-```bash
-# Check Azure logs
-az webapp log tail
+### Building for Production
 
-# Check AWS logs
-aws elasticbeanstalk retrieve-environment-info
+```bash
+# Build production Docker image
+docker build -f Dockerfile.prod -t portfolio:prod .
+
+# Run production build
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch
+```bash
+git checkout -b feature/AmazingFeature
+```
+3. Commit your changes
+```bash
+git commit -m 'Add some AmazingFeature'
+```
+4. Push to the branch
+```bash
+git push origin feature/AmazingFeature
+```
 5. Open a Pull Request
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## 👥 Author
 
-For support, email your-email@example.com or create an issue in the repository.
+Your Name
+- Website: [your-website.com](https://your-website.com)
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
 
 ## 🙏 Acknowledgments
 
@@ -215,3 +237,10 @@ For support, email your-email@example.com or create an issue in the repository.
 - [Azure Documentation](https://docs.microsoft.com/azure/)
 - [AWS Documentation](https://docs.aws.amazon.com/)
 - [GitHub Actions Documentation](https://docs.github.com/actions)
+
+## 📞 Support
+
+For support, email your.email@example.com or create an issue in the repository.
+
+---
+Made with ❤️ by [Your Name](https://github.com/yourusername)

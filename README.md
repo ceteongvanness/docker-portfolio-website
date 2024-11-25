@@ -33,8 +33,8 @@ Forked from VCard https://github.com/codewithsadee/vcard-personal-portfolio
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/portfolio-docker.git
-cd portfolio-docker
+git clone https://github.com/yourusername/docker-portfolio-website.git
+cd docker-portfolio-website
 ```
 
 2. **Build the Docker image**

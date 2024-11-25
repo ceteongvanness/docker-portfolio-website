@@ -1,7 +1,7 @@
 # Docker Portfolio Website
 
 A containerized personal portfolio website with automated deployment to Azure and AWS using GitHub Actions.
-Forked from VCard https://github.com/codewithsadee/vcard-personal-portfolio
+Sample code using https://github.com/codewithsadee/vcard-personal-portfolio
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)

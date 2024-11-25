@@ -224,23 +224,9 @@ git push origin feature/AmazingFeature
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Author
-
-Your Name
-- Website: [your-website.com](https://your-website.com)
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
-
 ## 🙏 Acknowledgments
 
 - [Docker Documentation](https://docs.docker.com/)
 - [Azure Documentation](https://docs.microsoft.com/azure/)
 - [AWS Documentation](https://docs.aws.amazon.com/)
 - [GitHub Actions Documentation](https://docs.github.com/actions)
-
-## 📞 Support
-
-For support, email your.email@example.com or create an issue in the repository.
-
----
-Made with ❤️ by [Your Name](https://github.com/yourusername)

@@ -1,0 +1,114 @@
+# .github/workflows/azure-deploy.yml
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AZURE_WEBAPP_NAME: your-webapp-name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: '8.0.x'
+  AZURE_RESOURCE_GROUP: your-resource-group
+  AZURE_APP_PLAN: your-app-plan
+  AZURE_LOCATION: 'eastus'
+  AZURE_REGISTRY: your-registry-name.azurecr.io
+  IMAGE_NAME: portfolio
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Log into Azure
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Log into Azure Container Registry (ACR)
+    - name: Log into ACR
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.AZURE_REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    # Build and push image to ACR
+    - name: Build and Push to ACR
+      run: |
+        docker build -t ${{ env.AZURE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+        docker push ${{ env.AZURE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+    
+    # Create Azure resources if they don't exist
+    - name: Create Azure Resources
+      run: |
+        # Check if resource group exists
+        if [[ $(az group exists --name ${{ env.AZURE_RESOURCE_GROUP }}) == 'false' ]]; then
+          echo "Creating resource group..."
+          az group create --name ${{ env.AZURE_RESOURCE_GROUP }} --location ${{ env.AZURE_LOCATION }}
+        fi
+        
+        # Check if app service plan exists
+        if [[ $(az appservice plan list --query "[?name=='${{ env.AZURE_APP_PLAN }}']" --output tsv) == '' ]]; then
+          echo "Creating app service plan..."
+          az appservice plan create --name ${{ env.AZURE_APP_PLAN }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --sku B1 --is-linux
+        fi
+        
+        # Check if web app exists
+        if [[ $(az webapp list --query "[?name=='${{ env.AZURE_WEBAPP_NAME }}']" --output tsv) == '' ]]; then
+          echo "Creating web app..."
+          az webapp create --name ${{ env.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --plan ${{ env.AZURE_APP_PLAN }} \
+            --deployment-container-image-name ${{ env.AZURE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        fi
+    
+    # Deploy to Azure Web App
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        images: ${{ env.AZURE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+    
+    # Configure Web App settings
+    - name: Configure Web App Settings
+      run: |
+        az webapp config appsettings set --name ${{ env.AZURE_WEBAPP_NAME }} \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --settings \
+            WEBSITES_PORT=80 \
+            DOCKER_REGISTRY_SERVER_URL=${{ env.AZURE_REGISTRY }} \
+            DOCKER_REGISTRY_SERVER_USERNAME=${{ secrets.REGISTRY_USERNAME }} \
+            DOCKER_REGISTRY_SERVER_PASSWORD=${{ secrets.REGISTRY_PASSWORD }}
+    
+    # Enable logging
+    - name: Enable Web App Logging
+      run: |
+        az webapp log config --name ${{ env.AZURE_WEBAPP_NAME }} \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --docker-container-logging filesystem
+    
+    # Verify deployment
+    - name: Verify Deployment
+      run: |
+        echo "Verifying deployment..."
+        DEPLOY_STATUS=$(az webapp show --name ${{ env.AZURE_WEBAPP_NAME }} \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --query "state" -o tsv)
+        
+        if [ "$DEPLOY_STATUS" != "Running" ]; then
+          echo "Deployment verification failed. Web app is not running."
+          exit 1
+        fi
+    
+    # Azure logout
+    - name: Azure Logout
+      run: |
+        az logout
